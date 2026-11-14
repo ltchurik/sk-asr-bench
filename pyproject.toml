@@ -10,7 +10,7 @@ readme = "README.md"
 license = "MIT"
 requires-python = ">=3.10"
 authors = [{ name = "Ľubomír Tchurik" }]
-keywords = ["slovak", "asr", "speech-recognition", "whisper", "benchmark", "wer"]
+keywords = ["slovak", "asr", "speech-recognition", "speech-to-text", "whisper", "benchmark", "wer", "cer", "leaderboard", "slovencina"]
 classifiers = [
   "Programming Language :: Python :: 3",
   "Topic :: Multimedia :: Sound/Audio :: Speech",
