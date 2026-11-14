@@ -1,0 +1,22 @@
+cff-version: 1.2.0
+message: "If you use sk-asr-bench in your work, please cite it using the metadata below."
+type: software
+title: "sk-asr-bench"
+abstract: "A reproducible benchmark of Slovak automatic speech recognition: open models (Whisper and Slovak fine-tunes, Parakeet/Canary) and commercial APIs scored on the same test sets with WER, CER, diacritics error rate and numeral/named-entity accuracy."
+authors:
+  - family-names: Tchurik
+    given-names: Ľubomír
+    orcid: "https://orcid.org/0009-0005-8053-9405"
+repository-code: "https://github.com/ltchurik/sk-asr-bench"
+url: "https://lubomirtchurik.sk"
+license: MIT
+version: 0.0.1
+date-released: 2026-11-14
+keywords:
+  - slovak
+  - asr
+  - speech recognition
+  - whisper
+  - benchmark
+  - word error rate
+  - diacritics

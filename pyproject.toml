@@ -1,0 +1,39 @@
+[build-system]
+requires = ["hatchling>=1.21"]
+build-backend = "hatchling.build"
+
+[project]
+name = "sk-asr-bench"
+version = "0.0.1"
+description = "Reproducible benchmark of Slovak speech recognition: WER/CER, diacritics, numbers and named entities"
+readme = "README.md"
+license = "MIT"
+requires-python = ">=3.10"
+authors = [{ name = "Ľubomír Tchurik" }]
+keywords = ["slovak", "asr", "speech-recognition", "whisper", "benchmark", "wer"]
+classifiers = [
+  "Programming Language :: Python :: 3",
+  "Topic :: Multimedia :: Sound/Audio :: Speech",
+  "Natural Language :: Slovak",
+]
+dependencies = []
+
+[project.optional-dependencies]
+# Hugging Face datasets: FLEURS ships a loading script, which datasets 4.x no longer runs.
+datasets = ["datasets>=2.18,<4", "soundfile>=0.12", "librosa>=0.10"]
+whisper = ["faster-whisper>=1.0"]
+transformers = ["transformers>=4.40", "torch>=2.2", "accelerate>=0.30"]
+dev = ["pytest>=8"]
+
+[project.scripts]
+sk-asr-bench = "sk_asr_bench.cli:main"
+
+[project.urls]
+Homepage = "https://github.com/ltchurik/sk-asr-bench"
+Author = "https://lubomirtchurik.sk"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/sk_asr_bench"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
