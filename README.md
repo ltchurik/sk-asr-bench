@@ -1,5 +1,7 @@
 # sk-asr-bench
 
+[![sk-asr-bench: Slovak speech recognition benchmark (WER, CER, diacritics)](.github/social-preview.png)](https://github.com/ltchurik/sk-asr-bench)
+
 **How well does AI understand spoken Slovak?** A reproducible, independent benchmark of Slovak speech recognition: open models (Whisper and its Slovak fine-tunes, NVIDIA Parakeet/Canary, …) and commercial APIs scored on the same test sets with the same normalization.
 
 [![ci](https://github.com/ltchurik/sk-asr-bench/actions/workflows/ci.yml/badge.svg)](https://github.com/ltchurik/sk-asr-bench/actions/workflows/ci.yml)
