@@ -4,7 +4,7 @@ from .metrics import Alignment, align, cer, diacritics_error_rate, score_corpus,
 from .normalize import normalize, strip_diacritics
 from .entities import Entity, entity_accuracy, parse_tagged
 
-__version__ = "0.0.1"
+__version__ = "0.1.0"
 
 __all__ = [
     "Alignment",
