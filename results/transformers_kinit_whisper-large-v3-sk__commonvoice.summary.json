@@ -1,0 +1,23 @@
+{
+  "system": "transformers:kinit/whisper-large-v3-sk",
+  "dataset": "commonvoice",
+  "limit": null,
+  "sk_asr_bench_version": "0.0.1",
+  "scored_at": "2026-11-15T15:13:13+00:00",
+  "scores": {
+    "utterances": 6006,
+    "ref_words": 27694,
+    "ref_chars": 191228,
+    "wer": 0.07265111576514768,
+    "cer": 0.022271843035538728,
+    "diacritics_error_rate": 0.007655087744637828,
+    "substitutions": 1665,
+    "deletions": 206,
+    "insertions": 141
+  },
+  "entities": {},
+  "batch_size": 32,
+  "transcription_seconds": 764.09,
+  "audio_seconds": 26096.96,
+  "rtf": 0.0293
+}

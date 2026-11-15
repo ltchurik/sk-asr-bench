@@ -1,0 +1,23 @@
+{
+  "system": "transformers:BuzzASR/slovak",
+  "dataset": "commonvoice",
+  "limit": null,
+  "sk_asr_bench_version": "0.0.1",
+  "scored_at": "2026-11-15T15:32:41+00:00",
+  "scores": {
+    "utterances": 6006,
+    "ref_words": 27694,
+    "ref_chars": 191228,
+    "wer": 0.011915938470426808,
+    "cer": 0.003979542744786328,
+    "diacritics_error_rate": 0.0010110493247634867,
+    "substitutions": 274,
+    "deletions": 40,
+    "insertions": 16
+  },
+  "entities": {},
+  "batch_size": 32,
+  "transcription_seconds": 601.04,
+  "audio_seconds": 26096.96,
+  "rtf": 0.023
+}

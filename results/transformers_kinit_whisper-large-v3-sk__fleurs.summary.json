@@ -1,0 +1,23 @@
+{
+  "system": "transformers:kinit/whisper-large-v3-sk",
+  "dataset": "fleurs",
+  "limit": null,
+  "sk_asr_bench_version": "0.0.1",
+  "scored_at": "2026-11-15T14:54:02+00:00",
+  "scores": {
+    "utterances": 792,
+    "ref_words": 15206,
+    "ref_chars": 99513,
+    "wer": 0.048796527686439564,
+    "cer": 0.018248872006672495,
+    "diacritics_error_rate": 0.003222412205708273,
+    "substitutions": 548,
+    "deletions": 120,
+    "insertions": 74
+  },
+  "entities": {},
+  "batch_size": 32,
+  "transcription_seconds": 305.47,
+  "audio_seconds": 9408.72,
+  "rtf": 0.0325
+}

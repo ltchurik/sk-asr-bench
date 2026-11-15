@@ -1,0 +1,23 @@
+{
+  "system": "transformers:infinitejoy/wav2vec2-large-xls-r-300m-slovak",
+  "dataset": "commonvoice",
+  "limit": null,
+  "sk_asr_bench_version": "0.0.1",
+  "scored_at": "2026-11-15T15:32:45+00:00",
+  "scores": {
+    "utterances": 6006,
+    "ref_words": 27694,
+    "ref_chars": 191228,
+    "wer": 0.2595146963241135,
+    "cer": 0.05748112201142092,
+    "diacritics_error_rate": 0.02401242146313281,
+    "substitutions": 5852,
+    "deletions": 1060,
+    "insertions": 275
+  },
+  "entities": {},
+  "batch_size": 32,
+  "transcription_seconds": 93.04,
+  "audio_seconds": 26096.96,
+  "rtf": 0.0036
+}

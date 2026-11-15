@@ -8,11 +8,50 @@
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 ![python](https://img.shields.io/badge/python-3.10%2B-blue)
 
-> **Status: 🚧 Early development — no published results yet.** The scoring core and CLI work and are tested; the first leaderboard run is in progress. Numbers will appear here only once they are reproducible from this repository.
+> **Status: first results (2026-11-15).** 17 open systems on FLEURS and Common Voice 27.0. Commercial APIs and a held-out test set are next.
 
-🇸🇰 [Po slovensky](#po-slovensky) · [Why](#why) · [Methodology](#methodology) · [Quickstart](#quickstart) · [Roadmap](#roadmap) · [Citing](#citing)
+🇸🇰 [Po slovensky](#po-slovensky) · [Results](#results) · [Why](#why) · [Methodology](#methodology) · [Quickstart](#quickstart) · [Roadmap](#roadmap) · [Citing](#citing)
 
 Part of a series on Slovak in AI: [sk-llm-eval](https://github.com/ltchurik/sk-llm-eval) (does the model *write* correct Slovak?) and [sk-tokenizer-bench](https://github.com/ltchurik/sk-tokenizer-bench) (how much more does Slovak cost in tokens?).
+
+## Results
+
+17 open systems, greedy decoding, fp16, one NVIDIA DGX Spark (GB10). FLEURS `sk_sk` test (792 utterances) and Common Voice 27.0 Slovak test (6,006 utterances). WER, CER and diacritics error rate in %; sorted by FLEURS WER.
+
+| System | Training data (per model card) | FLEURS WER | FLEURS CER | FLEURS diacritics | CV WER | CV CER | CV WER ≤3 words | CV WER >3 words | RTF |
+|---|---|---:|---:|---:|---:|---:|---:|---:|---:|
+| [kinit/whisper-large-v3-sk](https://huggingface.co/kinit/whisper-large-v3-sk) | SloPalSpeech, CV 24 ⚠, FLEURS ⚠, internal | **4.88** | **1.82** | 0.32 | 7.27 | 2.23 | 13.10 | 5.80 | 0.033 |
+| [kinit/whisper-large-v3-turbo-sk](https://huggingface.co/kinit/whisper-large-v3-turbo-sk) | SloPalSpeech, CV 24 ⚠, FLEURS ⚠, internal | 5.46 | 1.92 | **0.30** | 8.86 | 2.63 | 16.44 | 6.96 | 0.012 |
+| [NaiveNeuron/whisper-large-v3-sk](https://huggingface.co/NaiveNeuron/whisper-large-v3-sk) | SloPalSpeech | 5.56 | 2.11 | 0.40 | 10.53 | 3.47 | 20.47 | 8.04 | 0.125¹ |
+| [kinit/whisper-medium-sk](https://huggingface.co/kinit/whisper-medium-sk) | SloPalSpeech, CV 24 ⚠, FLEURS ⚠, internal | 5.98 | 2.17 | 0.44 | 9.99 | 3.11 | 17.95 | 8.00 | 0.020 |
+| [NaiveNeuron/whisper-large-v3-turbo-sk](https://huggingface.co/NaiveNeuron/whisper-large-v3-turbo-sk) | SloPalSpeech | 6.46 | 2.32 | 0.54 | 12.07 | 3.63 | 23.07 | 9.32 | 0.007 |
+| [NaiveNeuron/whisper-medium-sk](https://huggingface.co/NaiveNeuron/whisper-medium-sk) | SloPalSpeech | 7.83 | 3.05 | 0.46 | 16.16 | 6.64 | 34.78 | 11.49 | 0.050¹ |
+| [openai/whisper-large-v3](https://huggingface.co/openai/whisper-large-v3) | undisclosed web data | 9.35 | 2.79 | 1.93 | 19.09 | 5.58 | 37.18 | 14.56 | 0.034 |
+| [kinit/whisper-small-sk](https://huggingface.co/kinit/whisper-small-sk) | SloPalSpeech, CV 24 ⚠, FLEURS ⚠, internal | 9.72 | 3.95 | 0.64 | 13.35 | 4.17 | 23.66 | 10.77 | 0.010 |
+| [openai/whisper-large-v3-turbo](https://huggingface.co/openai/whisper-large-v3-turbo) | undisclosed web data | 10.19 | 2.92 | 2.06 | 28.45 | 9.22 | 61.96 | 20.05 | 0.013 |
+| [nvidia/parakeet-tdt-0.6b-v3](https://huggingface.co/nvidia/parakeet-tdt-0.6b-v3) | Granary, CV 7.0 ⚠, FLEURS ⚠, … | 10.23 | 3.17 | 1.21 | 8.30 | 2.24 | 12.27 | 7.31 | 0.027 |
+| [BuzzASR/slovak](https://huggingface.co/BuzzASR/slovak) | FLEURS ⚠, CV 25 ⚠ | 10.70 | 5.05 | 0.65 | *1.19*² | *0.40*² | *1.91*² | *1.01*² | 0.021 |
+| [NaiveNeuron/whisper-small-sk](https://huggingface.co/NaiveNeuron/whisper-small-sk) | SloPalSpeech | 10.85 | 3.51 | 0.72 | 23.51 | 8.90 | 43.18 | 18.58 | 0.005¹ |
+| [openai/whisper-medium](https://huggingface.co/openai/whisper-medium) | undisclosed web data | 18.87 | 4.95 | 3.32 | 35.88 | 10.65 | 60.43 | 29.73 | 0.021 |
+| [mikr/whisper-medium-sk-cv11](https://huggingface.co/mikr/whisper-medium-sk-cv11) | CV 11 ⚠ | 20.39 | 6.91 | 2.50 | 18.65 | 4.55 | 19.64 | 18.40 | 0.013 |
+| [infinitejoy/wav2vec2-large-xls-r-300m-slovak](https://huggingface.co/infinitejoy/wav2vec2-large-xls-r-300m-slovak) | CV 7.0 ⚠ | 27.36 | 8.09 | 2.71 | 25.95 | 5.75 | 26.71 | 25.76 | 0.002 |
+| [mikr/whisper-small-sk-cv11](https://huggingface.co/mikr/whisper-small-sk-cv11) | CV 11 ⚠ | 31.12 | 9.23 | 3.36 | 37.85 | 13.08 | 51.99 | 34.30 | 0.006 |
+| [openai/whisper-small](https://huggingface.co/openai/whisper-small) | undisclosed web data | 38.18 | 10.02 | 5.27 | 57.06 | 16.44 | 89.73 | 48.87 | 0.010 |
+
+⚠ **In-domain:** the model was trained on the training split of that corpus, so its score on the matching test set is not comparable with models that never saw the corpus. FLEURS splits do not share sentences, but recording conditions and reading style are the same. Common Voice draws new splits with every release, so clips in the 27.0 test split may have been in the training split of the earlier release a model used.
+
+¹ These models ship with `use_cache=False` in their generation config; the RTF was measured that way. With the KV cache (now forced by the harness, transcripts identical) they run about 3× faster, as the turbo row shows. RTF is indicative only: runs shared the machine.
+
+² Almost certainly test-set overlap: BuzzASR was trained on Common Voice 25, its FLEURS score is in line with stock Whisper large-v3, and 1.19 % WER is far below every other system. Do not use this number to rank it.
+
+**What the numbers say**
+
+- **Best on FLEURS:** kinit/whisper-large-v3-sk (4.88 % WER), but it was trained on FLEURS and Common Voice. **Best system that saw neither test corpus:** NaiveNeuron/whisper-large-v3-sk (5.56 % FLEURS, 10.53 % CV), trained only on parliamentary speech.
+- **Slovak fine-tuning fixes diacritics.** Stock Whisper large-v3 gets 1.9 % of words wrong only in diacritics; the kinit and NaiveNeuron fine-tunes stay at 0.3–0.7 %. The older mikr models (2022, Common Voice 11 only) do not.
+- **Stock Whisper breaks on short clips.** Almost half of the Slovak Common Voice test split (2,907 clips) has three words or fewer, often single words or lists like *jazero; rybník; močiar*. Whisper large-v3-turbo has 62 % WER on those, against 20 % on longer sentences, with hallucinated loops and even Icelandic output. FLEURS, with full sentences only, hides this.
+- **Greedy decoding** is used for every system; beam search of 5 would lower Whisper WER by roughly one point.
+
+Reproduce a row with `sk-asr-bench run --system transformers:<model> --dataset fleurs --batch-size 32` (or `--dataset commonvoice:<dir>`), then `sk-asr-bench report`. Per-run summaries are in [`results/`](results/).
 
 ## Why
 
@@ -40,10 +79,11 @@ Nobody runs all the systems on the same audio with the same scorer. This reposit
 - **Alignment**: plain Levenshtein with backtrace, implemented in ~100 lines with no dependencies, so the scorer is auditable and identical everywhere.
 - **Test sets** (audio is never stored in this repo; loaders fetch it):
   - [FLEURS](https://huggingface.co/datasets/google/fleurs) `sk_sk` test split (CC-BY 4.0)
-  - [Common Voice](https://commonvoice.mozilla.org) Slovak test split (CC0), downloaded by you from Mozilla
+  - [Common Voice](https://commonvoice.mozilla.org) Slovak test split (CC0), version 27.0; download it yourself from [Mozilla Data Collective](https://mozilladatacollective.com) after accepting its terms
   - a **new held-out set** written and recorded for this benchmark (numbers, dates, names, regional accents, telephone-quality audio), so that no model can have trained on it. *Planned.*
-  - SloPalSpeech (parliamentary speech) will be added only after its dataset licence is confirmed to allow evaluation use (the paper is CC BY-NC-ND).
-- **Systems**: run with default settings and `language=sk`; every run stores per-utterance transcripts so that each number can be inspected.
+  - SloPalSpeech (parliamentary speech, CC BY 4.0) is a training corpus with no held-out split, and several systems under test were fine-tuned on it, so it is not used as a test set.
+- **Systems**: run with `language=sk`, fp16 on the GPU and **greedy decoding** for every system (Whisper included, so it is compared on equal terms with the CTC/TDT models; beam search of 5 lowers Whisper large-v3 WER on FLEURS by about one point but is several times slower). Every run stores per-utterance transcripts so that each number can be inspected.
+- **Training-data overlap** is flagged in the results: a fine-tune trained on the same corpus as a test set (e.g. on the FLEURS or Common Voice training split) is scored but marked as in-domain.
 
 ## Prior art
 
@@ -97,7 +137,8 @@ A dataset is a JSONL manifest; tags mark spans scored separately:
 - [x] Scoring core: normalization, WER, CER, diacritics error rate, entity accuracy
 - [x] CLI with resumable runs and Markdown leaderboard
 - [x] Adapters: precomputed transcripts, faster-whisper, Hugging Face transformers, OpenAI-compatible API
-- [ ] First leaderboard on FLEURS + Common Voice (Whisper tiny→large-v3, Slovak fine-tunes, Parakeet/Canary)
+- [x] First leaderboard on FLEURS + Common Voice 27.0: 17 open systems (Whisper, Slovak fine-tunes, Parakeet, wav2vec2)
+- [ ] Canary, Whisper beam search column, NVIDIA NeMo adapter
 - [ ] Adapters for Gemini, ElevenLabs, Azure Speech, Google Speech-to-Text
 - [ ] Held-out Slovak test set: numbers, dates, names, accents, telephone audio
 - [ ] Optional number verbalization for Slovak (`25` ↔ `dvadsaťpäť`)
@@ -111,7 +152,12 @@ Contributions are welcome: new systems, test audio you have rights to share, or 
 
 Dnešné čísla pre slovenčinu sa nedajú porovnať: každý meria na inej sade, inou metrikou a väčšinou ich zverejňuje autor modelu alebo predajca. Benchmark meria chybovosť slov (WER) a znakov (CER), osobitne chyby v diakritike a presnosť čísel, dátumov a mien, teda častí prepisu, na ktorých v praxi záleží najviac. Pribudne aj vlastná testovacia sada s číslami, menami, nárečiami a telefonickou kvalitou zvuku, na ktorej sa žiadny model nemohol učiť.
 
-**Stav:** v ranom vývoji, výsledky zatiaľ nie sú zverejnené. Hodnotiace jadro a CLI fungujú a sú otestované.
+**Prvé výsledky (15. 11. 2026):** 17 otvorených modelov na FLEURS a Common Voice 27.0, pozri [tabuľku](#results).
+
+- Najlepší na FLEURS je **kinit/whisper-large-v3-sk** (WER 4,88 %), no trénovali ho aj na FLEURS a Common Voice. Najlepší model, ktorý nevidel ani jednu testovaciu sadu, je **NaiveNeuron/whisper-large-v3-sk** (FLEURS 5,56 %, CV 10,53 %).
+- Slovenské doladenie Whispera rieši diakritiku: pôvodný large-v3 má 1,9 % slov chybných len v diakritike, slovenské verzie od kinit a NaiveNeuron 0,3 až 0,7 %.
+- Pôvodný Whisper zlyháva na krátkych nahrávkach (1 až 3 slová, takmer polovica slovenského Common Voice): large-v3-turbo tam má WER 62 %.
+- BuzzASR má na Common Voice WER 1,19 %, takmer určite preto, že sa učil na Common Voice; toto číslo nepoužívajte na porovnanie.
 
 ## Citing
 

@@ -1,0 +1,23 @@
+{
+  "system": "transformers:NaiveNeuron/whisper-large-v3-turbo-sk",
+  "dataset": "commonvoice",
+  "limit": null,
+  "sk_asr_bench_version": "0.0.1",
+  "scored_at": "2026-11-15T15:13:18+00:00",
+  "scores": {
+    "utterances": 6006,
+    "ref_words": 27694,
+    "ref_chars": 191228,
+    "wer": 0.12074817650032497,
+    "cer": 0.036270838998473026,
+    "diacritics_error_rate": 0.011482631616956741,
+    "substitutions": 2654,
+    "deletions": 371,
+    "insertions": 319
+  },
+  "entities": {},
+  "batch_size": 32,
+  "transcription_seconds": 643.01,
+  "audio_seconds": 26096.96,
+  "rtf": 0.0246
+}

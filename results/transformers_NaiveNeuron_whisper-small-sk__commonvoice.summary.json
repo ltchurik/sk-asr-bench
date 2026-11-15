@@ -1,0 +1,23 @@
+{
+  "system": "transformers:NaiveNeuron/whisper-small-sk",
+  "dataset": "commonvoice",
+  "limit": null,
+  "sk_asr_bench_version": "0.0.1",
+  "scored_at": "2026-11-15T15:22:16+00:00",
+  "scores": {
+    "utterances": 6006,
+    "ref_words": 27694,
+    "ref_chars": 191228,
+    "wer": 0.2351050769119665,
+    "cer": 0.0889670968686594,
+    "diacritics_error_rate": 0.01722394742543511,
+    "substitutions": 4341,
+    "deletions": 607,
+    "insertions": 1563
+  },
+  "entities": {},
+  "batch_size": 32,
+  "transcription_seconds": 249.3,
+  "audio_seconds": 26096.96,
+  "rtf": 0.0096
+}

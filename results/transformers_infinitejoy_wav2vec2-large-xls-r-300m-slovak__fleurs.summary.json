@@ -1,0 +1,23 @@
+{
+  "system": "transformers:infinitejoy/wav2vec2-large-xls-r-300m-slovak",
+  "dataset": "fleurs",
+  "limit": null,
+  "sk_asr_bench_version": "0.0.1",
+  "scored_at": "2026-11-15T15:13:08+00:00",
+  "scores": {
+    "utterances": 792,
+    "ref_words": 15206,
+    "ref_chars": 99513,
+    "wer": 0.2736419834275944,
+    "cer": 0.08088390461547737,
+    "diacritics_error_rate": 0.027094567933710376,
+    "substitutions": 3223,
+    "deletions": 619,
+    "insertions": 319
+  },
+  "entities": {},
+  "batch_size": 32,
+  "transcription_seconds": 18.07,
+  "audio_seconds": 9408.72,
+  "rtf": 0.0019
+}

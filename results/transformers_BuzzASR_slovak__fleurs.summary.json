@@ -1,0 +1,23 @@
+{
+  "system": "transformers:BuzzASR/slovak",
+  "dataset": "fleurs",
+  "limit": null,
+  "sk_asr_bench_version": "0.0.1",
+  "scored_at": "2026-11-15T15:37:11+00:00",
+  "scores": {
+    "utterances": 792,
+    "ref_words": 15206,
+    "ref_chars": 99513,
+    "wer": 0.1069972379323951,
+    "cer": 0.05047581722990966,
+    "diacritics_error_rate": 0.006510587925818756,
+    "substitutions": 1241,
+    "deletions": 174,
+    "insertions": 212
+  },
+  "entities": {},
+  "batch_size": 32,
+  "transcription_seconds": 199.3,
+  "audio_seconds": 9408.72,
+  "rtf": 0.0212
+}

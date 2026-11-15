@@ -1,0 +1,23 @@
+{
+  "system": "transformers:openai/whisper-medium",
+  "dataset": "fleurs",
+  "limit": null,
+  "sk_asr_bench_version": "0.0.1",
+  "scored_at": "2026-11-15T14:53:52+00:00",
+  "scores": {
+    "utterances": 792,
+    "ref_words": 15206,
+    "ref_chars": 99513,
+    "wer": 0.1886755228199395,
+    "cer": 0.049450825520283785,
+    "diacritics_error_rate": 0.033210574773115877,
+    "substitutions": 2444,
+    "deletions": 213,
+    "insertions": 212
+  },
+  "entities": {},
+  "batch_size": 32,
+  "transcription_seconds": 201.51,
+  "audio_seconds": 9408.72,
+  "rtf": 0.0214
+}

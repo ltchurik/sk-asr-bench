@@ -1,0 +1,23 @@
+{
+  "system": "transformers:nvidia/parakeet-tdt-0.6b-v3",
+  "dataset": "commonvoice",
+  "limit": null,
+  "sk_asr_bench_version": "0.0.1",
+  "scored_at": "2026-11-15T15:13:10+00:00",
+  "scores": {
+    "utterances": 6006,
+    "ref_words": 27694,
+    "ref_chars": 191228,
+    "wer": 0.08301437134397342,
+    "cer": 0.02242349446733742,
+    "diacritics_error_rate": 0.011302087094677548,
+    "substitutions": 1967,
+    "deletions": 182,
+    "insertions": 150
+  },
+  "entities": {},
+  "batch_size": 32,
+  "transcription_seconds": 271.45,
+  "audio_seconds": 26096.96,
+  "rtf": 0.0104
+}

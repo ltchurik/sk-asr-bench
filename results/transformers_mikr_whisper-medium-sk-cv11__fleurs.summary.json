@@ -1,0 +1,23 @@
+{
+  "system": "transformers:mikr/whisper-medium-sk-cv11",
+  "dataset": "fleurs",
+  "limit": null,
+  "sk_asr_bench_version": "0.0.1",
+  "scored_at": "2026-11-15T15:11:57+00:00",
+  "scores": {
+    "utterances": 792,
+    "ref_words": 15206,
+    "ref_chars": 99513,
+    "wer": 0.20393265816125214,
+    "cer": 0.06910654889310944,
+    "diacritics_error_rate": 0.024990135472839667,
+    "substitutions": 2451,
+    "deletions": 288,
+    "insertions": 362
+  },
+  "entities": {},
+  "batch_size": 32,
+  "transcription_seconds": 126.1,
+  "audio_seconds": 9408.72,
+  "rtf": 0.0134
+}

@@ -1,0 +1,23 @@
+{
+  "system": "transformers:NaiveNeuron/whisper-large-v3-turbo-sk",
+  "dataset": "fleurs",
+  "limit": null,
+  "sk_asr_bench_version": "0.0.1",
+  "scored_at": "2026-11-15T16:07:46+00:00",
+  "scores": {
+    "utterances": 792,
+    "ref_words": 15206,
+    "ref_chars": 99513,
+    "wer": 0.06464553465737209,
+    "cer": 0.023152753911549244,
+    "diacritics_error_rate": 0.005392608180981192,
+    "substitutions": 698,
+    "deletions": 179,
+    "insertions": 106
+  },
+  "entities": {},
+  "batch_size": 32,
+  "transcription_seconds": 68.64,
+  "audio_seconds": 9408.72,
+  "rtf": 0.0073
+}

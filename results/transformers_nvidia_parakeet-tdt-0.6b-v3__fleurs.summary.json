@@ -1,0 +1,23 @@
+{
+  "system": "transformers:nvidia/parakeet-tdt-0.6b-v3",
+  "dataset": "fleurs",
+  "limit": null,
+  "sk_asr_bench_version": "0.0.1",
+  "scored_at": "2026-11-15T14:53:43+00:00",
+  "scores": {
+    "utterances": 792,
+    "ref_words": 15206,
+    "ref_chars": 99513,
+    "wer": 0.10226226489543601,
+    "cer": 0.031694351491764895,
+    "diacritics_error_rate": 0.012100486650006577,
+    "substitutions": 1215,
+    "deletions": 229,
+    "insertions": 111
+  },
+  "entities": {},
+  "batch_size": 32,
+  "transcription_seconds": 253.23,
+  "audio_seconds": 9408.72,
+  "rtf": 0.0269
+}

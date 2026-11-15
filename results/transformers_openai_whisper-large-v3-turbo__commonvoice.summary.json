@@ -1,0 +1,23 @@
+{
+  "system": "transformers:openai/whisper-large-v3-turbo",
+  "dataset": "commonvoice",
+  "limit": null,
+  "sk_asr_bench_version": "0.0.1",
+  "scored_at": "2026-11-15T15:13:09+00:00",
+  "scores": {
+    "utterances": 6006,
+    "ref_words": 27694,
+    "ref_chars": 191228,
+    "wer": 0.28446594930309815,
+    "cer": 0.09220407053360387,
+    "diacritics_error_rate": 0.04520834837871019,
+    "substitutions": 6268,
+    "deletions": 354,
+    "insertions": 1256
+  },
+  "entities": {},
+  "batch_size": 32,
+  "transcription_seconds": 461.14,
+  "audio_seconds": 26096.96,
+  "rtf": 0.0177
+}

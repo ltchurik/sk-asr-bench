@@ -1,0 +1,23 @@
+{
+  "system": "transformers:mikr/whisper-small-sk-cv11",
+  "dataset": "commonvoice",
+  "limit": null,
+  "sk_asr_bench_version": "0.0.1",
+  "scored_at": "2026-11-15T15:32:44+00:00",
+  "scores": {
+    "utterances": 6006,
+    "ref_words": 27694,
+    "ref_chars": 191228,
+    "wer": 0.3784574276016466,
+    "cer": 0.1308333507645324,
+    "diacritics_error_rate": 0.031703618112226474,
+    "substitutions": 6722,
+    "deletions": 874,
+    "insertions": 2885
+  },
+  "entities": {},
+  "batch_size": 32,
+  "transcription_seconds": 225.48,
+  "audio_seconds": 26096.96,
+  "rtf": 0.0086
+}
