@@ -7,6 +7,7 @@
 [![ci](https://github.com/ltchurik/sk-asr-bench/actions/workflows/ci.yml/badge.svg)](https://github.com/ltchurik/sk-asr-bench/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 ![python](https://img.shields.io/badge/python-3.10%2B-blue)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.24252739.svg)](https://doi.org/10.5281/zenodo.24252739)
 
 > **Status: first results (2026-11-15).** 17 open systems on FLEURS and Common Voice 27.0. Commercial APIs and a held-out test set are next.
 
@@ -142,7 +143,8 @@ A dataset is a JSONL manifest; tags mark spans scored separately:
 - [ ] Adapters for Gemini, ElevenLabs, Azure Speech, Google Speech-to-Text
 - [ ] Held-out Slovak test set: numbers, dates, names, accents, telephone audio
 - [ ] Optional number verbalization for Slovak (`25` ↔ `dvadsaťpäť`)
-- [ ] Hugging Face leaderboard Space and Zenodo DOI
+- [x] Zenodo DOI
+- [ ] Hugging Face leaderboard Space
 
 Contributions are welcome: new systems, test audio you have rights to share, or fixes to the scorer.
 
@@ -161,7 +163,7 @@ Dnešné čísla pre slovenčinu sa nedajú porovnať: každý meria na inej sad
 
 ## Citing
 
-See [CITATION.cff](CITATION.cff). A Zenodo DOI will be added with the first release.
+Use [CITATION.cff](CITATION.cff); GitHub's "Cite this repository" button renders it. The DOI [10.5281/zenodo.24252739](https://doi.org/10.5281/zenodo.24252739) covers all versions; version 0.1.0 is [10.5281/zenodo.24252740](https://doi.org/10.5281/zenodo.24252740).
 
 ## Author
 

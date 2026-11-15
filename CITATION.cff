@@ -7,6 +7,13 @@ authors:
   - family-names: Tchurik
     given-names: Ľubomír
     orcid: "https://orcid.org/0009-0005-8053-9405"
+identifiers:
+  - type: doi
+    value: "10.5281/zenodo.24252739"
+    description: "Concept DOI, resolves to the latest version"
+  - type: doi
+    value: "10.5281/zenodo.24252740"
+    description: "Version 0.1.0"
 repository-code: "https://github.com/ltchurik/sk-asr-bench"
 url: "https://lubomirtchurik.sk"
 license: MIT
