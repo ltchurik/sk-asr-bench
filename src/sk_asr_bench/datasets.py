@@ -55,7 +55,10 @@ def _fleurs(split: str = "test") -> Iterator[Utterance]:
         raise SystemExit('FLEURS needs: pip install "sk-asr-bench[datasets]"') from exc
     ds = load_dataset("google/fleurs", "sk_sk", split=split, trust_remote_code=True)
     for row in ds:
-        yield Utterance(id=f"fleurs-{row['id']}", text=row["raw_transcription"], audio=row["audio"])
+        # FLEURS ``id`` identifies the sentence, and most sentences are read by
+        # several speakers, so the recording's file name is needed to make it unique.
+        rec = Path(row.get("path") or row["audio"].get("path") or "").stem
+        yield Utterance(id=f"fleurs-{row['id']}-{rec}", text=row["raw_transcription"], audio=row["audio"])
 
 
 def _commonvoice(directory: str, split: str = "test") -> Iterator[Utterance]:

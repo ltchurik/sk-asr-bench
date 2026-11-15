@@ -46,3 +46,40 @@ def test_wav_bytes_roundtrip():
         assert w.getframerate() == 16000 and w.getnchannels() == 1
         frames = struct.unpack("<4h", w.readframes(4))
     assert frames == (0, 16383, -32767, 32767)
+
+
+def test_batching_matches_single(tmp_path, monkeypatch):
+    """--batch-size routes utterances through the system's batch() and gives the same rows."""
+    from sk_asr_bench import systems
+
+    calls = []
+    hyps = {json.loads(l)["id"]: json.loads(l)["text"] for l in (FIX / "hyp.jsonl").read_text(encoding="utf-8").splitlines() if l.strip()}
+
+    def fake_load(spec):
+        def run(utt):
+            calls.append(1)
+            return hyps[utt.id]
+
+        def batch(utts):
+            calls.append(len(utts))
+            return [hyps[u.id] for u in utts]
+
+        run.batch = batch
+        return run
+
+    monkeypatch.setattr(systems, "load", fake_load)
+    args = ["run", "--system", "fake:x", "--dataset", f"jsonl:{FIX/'refs.jsonl'}"]
+    main(args + ["--out", str(tmp_path / "a")])
+    single, calls[:] = list(calls), []
+    main(args + ["--out", str(tmp_path / "b"), "--batch-size", "2"])
+    assert single == [1, 1, 1] and calls == [2, 1]
+    a = json.loads(next((tmp_path / "a").glob("*.summary.json")).read_text(encoding="utf-8"))
+    b = json.loads(next((tmp_path / "b").glob("*.summary.json")).read_text(encoding="utf-8"))
+    assert a["scores"] == b["scores"] and b["batch_size"] == 2
+
+
+def test_dataset_label_hides_local_paths():
+    from sk_asr_bench.cli import _dataset_label
+
+    assert _dataset_label("commonvoice:/home/someone/data/cv-sk") == "commonvoice"
+    assert _dataset_label("fleurs") == "fleurs"

@@ -30,6 +30,11 @@ from typing import Callable, Dict, Iterable
 from .datasets import Audio, Utterance
 
 TARGET_SR = 16_000
+# Whisper is decoded greedily (1 beam) by every adapter, like the CTC/TDT systems it
+# is compared with. Beam search of 5 lowers Whisper large-v3 WER on FLEURS-sk by about
+# one point but is several times slower; the transformers pipeline would otherwise
+# silently default to 5 beams, so it is always set explicitly.
+WHISPER_BEAMS = 1
 
 Transcriber = Callable[[Utterance], str]
 
@@ -90,22 +95,100 @@ def _faster_whisper(model: str) -> Transcriber:  # pragma: no cover - needs mode
 
     def run(utt: Utterance) -> str:
         audio = utt.audio if isinstance(utt.audio, str) else _audio_array(utt.audio)[0]
-        segments, _ = m.transcribe(audio, language="sk", beam_size=5)
+        segments, _ = m.transcribe(audio, language="sk", beam_size=WHISPER_BEAMS)
         return " ".join(s.text.strip() for s in segments)
 
     return run
 
 
+STANDARD_WHISPER_VOCABS = (51865, 51866)  # multilingual Whisper up to v2 / v3
+
+
+def _fix_whisper_generation_config(m, model: str) -> None:  # pragma: no cover - needs model weights
+    """Make ``generate(language=..., task=...)`` work for fine-tunes whose config lacks ``lang_to_id``.
+
+    * Models with their own tokenizer (BuzzASR) do ship the special-token ids, but
+      transformers ignores a generation_config.json marked ``_from_model_config``;
+      copy the ids from the raw file -- the stock Whisper ids would be wrong there.
+    * Old fine-tunes with the stock vocabulary (HF Whisper event 2022, e.g. mikr/*)
+      predate language/task kwargs; borrow the config of the matching base model.
+    """
+    import json
+
+    from huggingface_hub import hf_hub_download  # type: ignore
+    from transformers import GenerationConfig  # type: ignore
+
+    gc = m.generation_config
+    try:
+        raw = json.loads(open(hf_hub_download(model, "generation_config.json"), encoding="utf-8").read())
+    except Exception:  # noqa: BLE001 - no file: fall through to the base model
+        raw = {}
+    if "lang_to_id" in raw:
+        for key in ("lang_to_id", "task_to_id", "no_timestamps_token_id"):
+            if key in raw:
+                setattr(gc, key, raw[key])
+        gc.is_multilingual = True
+        return
+    cfg = m.config
+    if cfg.vocab_size not in STANDARD_WHISPER_VOCABS:
+        raise ValueError(f"{model}: custom Whisper vocabulary without lang_to_id; cannot force Slovak")
+    base = {4: "tiny", 6: "base", 12: "small", 24: "medium"}.get(cfg.encoder_layers)
+    if base is None:
+        base = "large-v3" if cfg.num_mel_bins == 128 else "large-v2"
+    m.generation_config = GenerationConfig.from_pretrained(f"openai/whisper-{base}")
+
+
 def _transformers(model: str) -> Transcriber:  # pragma: no cover - needs model weights
+    import torch  # type: ignore
     from transformers import pipeline  # type: ignore
 
-    asr = pipeline("automatic-speech-recognition", model=model, device_map="auto")
-    kwargs = {"generate_kwargs": {"language": "slovak", "task": "transcribe"}} if "whisper" in model.lower() else {}
+    cuda = torch.cuda.is_available()
+    dtype = torch.float16 if cuda else torch.float32
+    asr = pipeline("automatic-speech-recognition", model=model, device=0 if cuda else -1, dtype=dtype)
+    whisper = asr.model.config.model_type == "whisper"
+    if whisper and not hasattr(asr.model.generation_config, "lang_to_id"):
+        _fix_whisper_generation_config(asr.model, model)
+    kwargs = (
+        {"generate_kwargs": {"language": "slovak", "task": "transcribe", "num_beams": WHISPER_BEAMS, "use_cache": True}} if whisper else {}
+    )
 
     def run(utt: Utterance) -> str:
         arr, sr = _audio_array(utt.audio)
         return asr({"raw": arr, "sampling_rate": sr}, chunk_length_s=30, **kwargs)["text"].strip()
 
+    if not whisper:
+        return run
+
+    # The pipeline does not batch Whisper when chunking is on, so clips that fit in
+    # Whisper's 30 s window are decoded with model.generate in real batches; longer
+    # clips still go through the pipeline's chunked long-form path one by one.
+    def batch(utts):
+        arrays = [_audio_array(u.audio)[0] for u in utts]
+        short = [i for i, a in enumerate(arrays) if len(a) <= 30 * TARGET_SR]
+        out = [""] * len(utts)
+        if short:
+            feats = asr.feature_extractor(
+                [arrays[i] for i in short], sampling_rate=TARGET_SR, return_tensors="pt", return_attention_mask=True
+            )
+            with torch.inference_mode():
+                ids = asr.model.generate(
+                    feats.input_features.to(asr.model.device, dtype),
+                    attention_mask=feats.attention_mask.to(asr.model.device),
+                    language="sk",
+                    task="transcribe",
+                    num_beams=WHISPER_BEAMS,
+                    # some fine-tunes (NaiveNeuron) ship use_cache=False: same output, but
+                    # 3-4x slower and memory-hungry enough to OOM a 128 GB box at batch 32
+                    use_cache=True,
+                )
+            for i, text in zip(short, asr.tokenizer.batch_decode(ids, skip_special_tokens=True)):
+                out[i] = text.strip()
+        for i in range(len(utts)):
+            if i not in short:
+                out[i] = run(utts[i])
+        return out
+
+    run.batch = batch  # type: ignore[attr-defined]
     return run
 
 
