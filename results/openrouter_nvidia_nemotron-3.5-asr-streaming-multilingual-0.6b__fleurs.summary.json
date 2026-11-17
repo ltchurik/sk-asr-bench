@@ -1,0 +1,24 @@
+{
+  "system": "openrouter:nvidia/nemotron-3.5-asr-streaming-multilingual-0.6b",
+  "dataset": "fleurs",
+  "limit": null,
+  "sk_asr_bench_version": "0.1.0",
+  "scored_at": "2026-11-16T15:40:11+00:00",
+  "scores": {
+    "utterances": 792,
+    "ref_words": 15206,
+    "ref_chars": 99513,
+    "wer": 0.4998027094567934,
+    "cer": 0.1500808939535538,
+    "diacritics_error_rate": 0.09180586610548468,
+    "substitutions": 6646,
+    "deletions": 566,
+    "insertions": 388
+  },
+  "entities": {},
+  "batch_size": 64,
+  "transcription_seconds": 732.77,
+  "api_cost_usd": 0.0313,
+  "audio_seconds": 9408.72,
+  "rtf": 0.0779
+}

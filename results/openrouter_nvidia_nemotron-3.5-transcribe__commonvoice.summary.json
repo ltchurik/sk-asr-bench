@@ -1,0 +1,24 @@
+{
+  "system": "openrouter:nvidia/nemotron-3.5-transcribe",
+  "dataset": "commonvoice",
+  "limit": null,
+  "sk_asr_bench_version": "0.1.0",
+  "scored_at": "2026-11-16T17:23:39+00:00",
+  "scores": {
+    "utterances": 6006,
+    "ref_words": 27694,
+    "ref_chars": 191228,
+    "wer": 0.18285549216436772,
+    "cer": 0.059703599891229316,
+    "diacritics_error_rate": 0.02430129269877952,
+    "substitutions": 3903,
+    "deletions": 290,
+    "insertions": 871
+  },
+  "entities": {},
+  "batch_size": 64,
+  "transcription_seconds": 1916.34,
+  "api_cost_usd": 0.7807,
+  "audio_seconds": 26096.96,
+  "rtf": 0.0734
+}

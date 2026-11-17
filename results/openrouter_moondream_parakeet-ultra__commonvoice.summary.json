@@ -1,0 +1,24 @@
+{
+  "system": "openrouter:moondream/parakeet-ultra",
+  "dataset": "commonvoice",
+  "limit": null,
+  "sk_asr_bench_version": "0.1.0",
+  "scored_at": "2026-11-16T16:28:17+00:00",
+  "scores": {
+    "utterances": 6006,
+    "ref_words": 27694,
+    "ref_chars": 191228,
+    "wer": 0.07756192677114176,
+    "cer": 0.019662392536657813,
+    "diacritics_error_rate": 0.010977106954574998,
+    "substitutions": 1823,
+    "deletions": 163,
+    "insertions": 162
+  },
+  "entities": {},
+  "batch_size": 64,
+  "transcription_seconds": 1154.44,
+  "api_cost_usd": 0.434,
+  "audio_seconds": 26096.96,
+  "rtf": 0.0442
+}

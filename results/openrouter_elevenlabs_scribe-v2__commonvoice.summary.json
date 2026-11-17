@@ -1,0 +1,24 @@
+{
+  "system": "openrouter:elevenlabs/scribe-v2",
+  "dataset": "commonvoice",
+  "limit": null,
+  "sk_asr_bench_version": "0.1.0",
+  "scored_at": "2026-11-16T22:13:54+00:00",
+  "scores": {
+    "utterances": 6006,
+    "ref_words": 27694,
+    "ref_chars": 191228,
+    "wer": 0.06752365133241857,
+    "cer": 0.020865145271612942,
+    "diacritics_error_rate": 0.008232830215931249,
+    "substitutions": 1469,
+    "deletions": 110,
+    "insertions": 291
+  },
+  "entities": {},
+  "batch_size": 16,
+  "transcription_seconds": 5006.09,
+  "api_cost_usd": 1.5914,
+  "audio_seconds": 26096.96,
+  "rtf": 0.1918
+}

@@ -1,0 +1,24 @@
+{
+  "system": "openrouter:x-ai/grok-stt-2.0",
+  "dataset": "commonvoice",
+  "limit": null,
+  "sk_asr_bench_version": "0.1.0",
+  "scored_at": "2026-11-16T17:42:55+00:00",
+  "scores": {
+    "utterances": 6006,
+    "ref_words": 27694,
+    "ref_chars": 191228,
+    "wer": 0.18484148190943886,
+    "cer": 0.05438011169912356,
+    "diacritics_error_rate": 0.030187044125081244,
+    "substitutions": 4299,
+    "deletions": 343,
+    "insertions": 477
+  },
+  "entities": {},
+  "batch_size": 64,
+  "transcription_seconds": 961.59,
+  "api_cost_usd": 0.7234,
+  "audio_seconds": 26096.96,
+  "rtf": 0.0368
+}

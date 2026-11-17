@@ -192,14 +192,27 @@ def _transformers(model: str) -> Transcriber:  # pragma: no cover - needs model 
     return run
 
 
-def _openai(model: str) -> Transcriber:  # pragma: no cover - needs network
-    base = os.environ.get("OPENAI_BASE_URL", "https://api.openai.com/v1").rstrip("/")
-    key = os.environ.get("OPENAI_API_KEY", "")
+def _openai(model: str, base: str = "", key: str = "") -> Transcriber:  # pragma: no cover - needs network
+    """Any OpenAI-compatible ``/audio/transcriptions`` endpoint (OpenAI, OpenRouter, vLLM, ...).
 
-    def run(utt: Utterance) -> str:
-        if isinstance(utt.audio, str):
+    Utterances of a batch are sent concurrently (``SK_ASR_CONCURRENCY``, default 8);
+    rate limits and server errors are retried with backoff. When the endpoint reports
+    a price (OpenRouter's ``usage.cost``), it is kept per utterance in ``run.costs``.
+    """
+    import time
+    import urllib.error
+    from concurrent.futures import ThreadPoolExecutor
+
+    base = (base or os.environ.get("OPENAI_BASE_URL", "https://api.openai.com/v1")).rstrip("/")
+    key = key or os.environ.get("OPENAI_API_KEY", "")
+    workers = int(os.environ.get("SK_ASR_CONCURRENCY", "8"))
+    costs: Dict[str, float] = {}
+
+    def request(utt: Utterance) -> dict:
+        if isinstance(utt.audio, str) and utt.audio.lower().endswith(".wav"):
             data, name = Path(utt.audio).read_bytes(), Path(utt.audio).name
         else:
+            # Some providers accept only RIFF/WAVE (Meta), so MP3 clips are decoded too.
             arr, sr = _audio_array(utt.audio)
             data, name = wav_bytes(arr, sr), "audio.wav"
         boundary = uuid.uuid4().hex
@@ -211,15 +224,49 @@ def _openai(model: str) -> Transcriber:  # pragma: no cover - needs network
             f"Content-Type: application/octet-stream\r\n\r\n".encode() + data + b"\r\n"
         )
         parts.append(f"--{boundary}--\r\n".encode())
-        req = urllib.request.Request(
-            f"{base}/audio/transcriptions",
-            data=b"".join(parts),
-            headers={"Content-Type": f"multipart/form-data; boundary={boundary}", "Authorization": f"Bearer {key}"},
-        )
-        with urllib.request.urlopen(req, timeout=300) as resp:
-            return json.loads(resp.read())["text"].strip()
+        body = b"".join(parts)
+        headers = {"Content-Type": f"multipart/form-data; boundary={boundary}", "Authorization": f"Bearer {key}"}
+        for attempt in range(10):
+            try:
+                req = urllib.request.Request(f"{base}/audio/transcriptions", data=body, headers=headers)
+                with urllib.request.urlopen(req, timeout=300) as resp:
+                    return json.loads(resp.read())
+            except urllib.error.HTTPError as exc:
+                detail = exc.read()[:300]
+                # OpenRouter answers 402 "in_flight_budget_exhausted" while concurrent
+                # requests hold credit reservations; it clears once they settle.
+                transient = exc.code in (408, 409, 425, 429, 500, 502, 503, 504, 520) or (
+                    exc.code == 402 and (b"in_flight" in detail or b"in-flight" in detail)
+                )
+                if not transient or attempt == 9:
+                    raise SystemExit(f"{model}: HTTP {exc.code}: {detail!r}") from exc
+            except (urllib.error.URLError, TimeoutError, ConnectionError):
+                if attempt == 9:
+                    raise
+            time.sleep(min(2**attempt, 60))
+        raise AssertionError("unreachable")
 
+    def run(utt: Utterance) -> str:
+        out = request(utt)
+        cost = (out.get("usage") or {}).get("cost")
+        if cost is not None:
+            costs[utt.id] = float(cost)
+        return (out.get("text") or "").strip()
+
+    def batch(utts):
+        with ThreadPoolExecutor(max_workers=workers) as pool:
+            return list(pool.map(run, utts))
+
+    run.batch = batch  # type: ignore[attr-defined]
+    run.costs = costs  # type: ignore[attr-defined]
     return run
+
+
+def _openrouter(model: str) -> Transcriber:  # pragma: no cover - needs network
+    key = os.environ.get("OPENROUTER_API_KEY", "")
+    if not key:
+        raise SystemExit("openrouter: set OPENROUTER_API_KEY")
+    return _openai(model, base="https://openrouter.ai/api/v1", key=key)
 
 
 PLANNED = {"gemini", "elevenlabs", "azure", "google"}
@@ -235,6 +282,8 @@ def load(spec: str) -> Transcriber:
         return _transformers(arg)
     if kind == "openai" and arg:
         return _openai(arg)
+    if kind == "openrouter" and arg:
+        return _openrouter(arg)
     if kind in PLANNED:
         raise SystemExit(f"system {kind!r} is planned but not implemented yet -- contributions welcome")
     raise SystemExit(

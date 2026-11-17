@@ -1,0 +1,24 @@
+{
+  "system": "openrouter:mistralai/voxtral-mini-3b-2507",
+  "dataset": "fleurs",
+  "limit": null,
+  "sk_asr_bench_version": "0.1.0",
+  "scored_at": "2026-11-16T16:28:22+00:00",
+  "scores": {
+    "utterances": 792,
+    "ref_words": 15206,
+    "ref_chars": 99513,
+    "wer": 0.25101933447323427,
+    "cer": 0.0926914071528343,
+    "diacritics_error_rate": 0.037879784295672764,
+    "substitutions": 3433,
+    "deletions": 244,
+    "insertions": 140
+  },
+  "entities": {},
+  "batch_size": 64,
+  "transcription_seconds": 145.85,
+  "api_cost_usd": 0.1568,
+  "audio_seconds": 9408.72,
+  "rtf": 0.0155
+}

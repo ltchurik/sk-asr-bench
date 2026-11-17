@@ -1,0 +1,24 @@
+{
+  "system": "openrouter:nvidia/nemotron-3.5-transcribe",
+  "dataset": "fleurs",
+  "limit": null,
+  "sk_asr_bench_version": "0.1.0",
+  "scored_at": "2026-11-16T20:51:34+00:00",
+  "scores": {
+    "utterances": 792,
+    "ref_words": 15206,
+    "ref_chars": 99513,
+    "wer": 0.06924898066552676,
+    "cer": 0.03595510134354305,
+    "diacritics_error_rate": 0.006313297382612127,
+    "substitutions": 757,
+    "deletions": 116,
+    "insertions": 180
+  },
+  "entities": {},
+  "batch_size": 16,
+  "transcription_seconds": 1534.55,
+  "api_cost_usd": 0.2211,
+  "audio_seconds": 9408.72,
+  "rtf": 0.1631
+}

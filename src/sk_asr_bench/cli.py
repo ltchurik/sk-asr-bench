@@ -73,6 +73,9 @@ def cmd_run(args: argparse.Namespace) -> int:
             row = {"id": utt.id, "ref": utt.text, "hyp": hyp, "seconds": round(elapsed * share, 4)}
             if dur is not None:
                 row["audio_seconds"] = round(dur, 3)
+            cost = getattr(transcribe, "costs", {}).get(utt.id)
+            if cost is not None:
+                row["cost_usd"] = cost
             fh.write(json.dumps(row, ensure_ascii=False) + "\n")
             rows.append(row)
         fh.flush()
@@ -102,6 +105,9 @@ def cmd_run(args: argparse.Namespace) -> int:
         "batch_size": args.batch_size,
         "transcription_seconds": round(sum(r.get("seconds", 0.0) for r in rows), 2),
     }
+    costs = [r["cost_usd"] for r in rows if "cost_usd" in r]
+    if costs:
+        summary["api_cost_usd"] = round(sum(costs), 4)
     audio_total = sum(r.get("audio_seconds", 0.0) for r in rows)
     if audio_total:
         summary["audio_seconds"] = round(audio_total, 2)
@@ -146,7 +152,7 @@ def build_parser() -> argparse.ArgumentParser:
     sub = p.add_subparsers(dest="command", required=True)
 
     r = sub.add_parser("run", help="transcribe a dataset with one system and score it")
-    r.add_argument("--system", required=True, help="hyp:PATH | faster-whisper:MODEL | transformers:MODEL | openai:MODEL")
+    r.add_argument("--system", required=True, help="hyp:PATH | faster-whisper:MODEL | transformers:MODEL | openai:MODEL | openrouter:MODEL")
     r.add_argument("--dataset", required=True, help="jsonl:PATH | fleurs | commonvoice:DIR")
     r.add_argument("--limit", type=int, default=None, help="only the first N utterances")
     r.add_argument("--out", default="results", help="output directory (default: results)")

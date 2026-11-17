@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "sk-asr-bench"
-version = "0.1.0"
+version = "0.2.0"
 description = "Reproducible benchmark of Slovak speech recognition: WER/CER, diacritics, numbers and named entities"
 readme = "README.md"
 license = "MIT"

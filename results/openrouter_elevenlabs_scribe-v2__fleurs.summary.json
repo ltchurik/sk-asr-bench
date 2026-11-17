@@ -1,0 +1,24 @@
+{
+  "system": "openrouter:elevenlabs/scribe-v2",
+  "dataset": "fleurs",
+  "limit": null,
+  "sk_asr_bench_version": "0.1.0",
+  "scored_at": "2026-11-16T21:12:13+00:00",
+  "scores": {
+    "utterances": 792,
+    "ref_words": 15206,
+    "ref_chars": 99513,
+    "wer": 0.02683151387610154,
+    "cer": 0.012400389898807191,
+    "diacritics_error_rate": 0.0020386689464684995,
+    "substitutions": 287,
+    "deletions": 80,
+    "insertions": 41
+  },
+  "entities": {},
+  "batch_size": 16,
+  "transcription_seconds": 1368.15,
+  "api_cost_usd": 0.575,
+  "audio_seconds": 9408.72,
+  "rtf": 0.1454
+}

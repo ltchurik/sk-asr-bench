@@ -1,0 +1,24 @@
+{
+  "system": "openrouter:meta/muse-voice-transcribe-1.0",
+  "dataset": "fleurs",
+  "limit": null,
+  "sk_asr_bench_version": "0.1.0",
+  "scored_at": "2026-11-16T18:02:01+00:00",
+  "scores": {
+    "utterances": 792,
+    "ref_words": 15206,
+    "ref_chars": 99513,
+    "wer": 0.11041694068131001,
+    "cer": 0.04471777556701134,
+    "diacritics_error_rate": 0.01144285150598448,
+    "substitutions": 1296,
+    "deletions": 274,
+    "insertions": 109
+  },
+  "entities": {},
+  "batch_size": 64,
+  "transcription_seconds": 1192.13,
+  "api_cost_usd": 0.4715,
+  "audio_seconds": 9408.72,
+  "rtf": 0.1267
+}

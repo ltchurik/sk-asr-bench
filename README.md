@@ -9,7 +9,7 @@
 ![python](https://img.shields.io/badge/python-3.10%2B-blue)
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.24252739.svg)](https://doi.org/10.5281/zenodo.24252739)
 
-> **Status: first results (2026-11-15).** 17 open systems on FLEURS and Common Voice 27.0. Commercial APIs and a held-out test set are next.
+> **Status (2026-11-17):** 17 open systems and 7 commercial APIs on FLEURS and Common Voice 27.0. A held-out test set is next.
 
 🇸🇰 [Po slovensky](#po-slovensky) · [Results](#results) · [Why](#why) · [Methodology](#methodology) · [Quickstart](#quickstart) · [Roadmap](#roadmap) · [Citing](#citing)
 
@@ -53,6 +53,28 @@ Part of a series on Slovak in AI: [sk-llm-eval](https://github.com/ltchurik/sk-l
 - **Greedy decoding** is used for every system; beam search of 5 would lower Whisper WER by roughly one point.
 
 Reproduce a row with `sk-asr-bench run --system transformers:<model> --dataset fleurs --batch-size 32` (or `--dataset commonvoice:<dir>`), then `sk-asr-bench report`. Per-run summaries are in [`results/`](results/).
+
+### Commercial APIs (via OpenRouter)
+
+7 hosted speech-to-text models on the same test sets, called through [OpenRouter](https://openrouter.ai)'s `/audio/transcriptions` endpoint (2026-11-16) with `language=sk`, audio sent as 16 kHz WAV. Cost is what OpenRouter billed for these runs (`usage.cost`), per hour of audio. Training data of these models is not disclosed, so overlap with FLEURS or Common Voice cannot be ruled out.
+
+| System | FLEURS WER | FLEURS CER | FLEURS diacritics | CV WER | CV CER | CV WER ≤3 words | CV WER >3 words | USD per audio hour |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|
+| elevenlabs/scribe-v2 | **2.68** | **1.24** | **0.20** | **6.75** | 2.09 | 17.64 | **4.02** | 0.22 |
+| nvidia/nemotron-3.5-transcribe | 6.92 | 3.60 | 0.63 | 18.29 | 5.97 | 43.20 | 12.04 | 0.10 |
+| moondream/parakeet-ultra | 7.85 | 2.41 | 1.15 | 7.76 | **1.97** | **11.84** | 6.73 | 0.06 |
+| x-ai/grok-stt-2.0 | 9.22 | 3.77 | 1.37 | 18.48 | 5.44 | 35.84 | 14.13 | 0.10 |
+| meta/muse-voice-transcribe-1.0 | 11.04 | 4.47 | 1.14 | *30.37*³ | *11.19*³ | *50.87*³ | *25.21*³ | 0.18 |
+| mistralai/voxtral-mini-3b-2507 | 25.10 | 9.27 | 3.79 | *144.61*³ | *75.54*³ | *51.69*³ | *165.30*³ | 0.06 |
+| nvidia/nemotron-3.5-asr-streaming-multilingual-0.6b | 49.98 | 15.01 | 9.18 | 69.19 | 32.88 | 86.38 | 64.88 | 0.01 |
+
+³ Incomplete run: the provider kept refusing the remaining clips (Meta: HTTP 429 on 5,376 of 6,006 done; Mistral: HTTP 504 timeouts on 3,474 done). Scores are over the clips that were transcribed and are indicative only.
+
+- **ElevenLabs Scribe v2 is the most accurate system in the benchmark**, open or commercial: 2.68 % WER on FLEURS, half the error of the best open fine-tune, and near-perfect diacritics.
+- **Parakeet-ultra is the best value** (about 6 cents per audio hour) and the only API that is as good on short Common Voice clips as on full sentences.
+- Grok, Nemotron-transcribe and Meta Muse break on short clips the way stock Whisper does; Voxtral Mini hallucinates on them (WER over 100 %). Qwen3-ASR was excluded because it does not support Slovak (it answered in Czech).
+
+Reproduce with `OPENROUTER_API_KEY=... sk-asr-bench run --system openrouter:<model> --dataset fleurs`. Set `SK_ASR_CONCURRENCY` (default 8) to the number of parallel requests; with a small credit balance use 1, because OpenRouter reserves credit for every request in flight.
 
 ## Why
 
@@ -137,10 +159,11 @@ A dataset is a JSONL manifest; tags mark spans scored separately:
 
 - [x] Scoring core: normalization, WER, CER, diacritics error rate, entity accuracy
 - [x] CLI with resumable runs and Markdown leaderboard
-- [x] Adapters: precomputed transcripts, faster-whisper, Hugging Face transformers, OpenAI-compatible API
+- [x] Adapters: precomputed transcripts, faster-whisper, Hugging Face transformers, OpenAI-compatible API, OpenRouter
+- [x] Commercial APIs via OpenRouter: ElevenLabs, Grok, Meta, Mistral, NVIDIA, Moondream
 - [x] First leaderboard on FLEURS + Common Voice 27.0: 17 open systems (Whisper, Slovak fine-tunes, Parakeet, wav2vec2)
 - [ ] Canary, Whisper beam search column, NVIDIA NeMo adapter
-- [ ] Adapters for Gemini, ElevenLabs, Azure Speech, Google Speech-to-Text
+- [ ] Gemini, OpenAI gpt-4o-transcribe, Deepgram, Azure Speech, Google Speech-to-Text
 - [ ] Held-out Slovak test set: numbers, dates, names, accents, telephone audio
 - [ ] Optional number verbalization for Slovak (`25` ↔ `dvadsaťpäť`)
 - [x] Zenodo DOI
@@ -160,6 +183,8 @@ Dnešné čísla pre slovenčinu sa nedajú porovnať: každý meria na inej sad
 - Slovenské doladenie Whispera rieši diakritiku: pôvodný large-v3 má 1,9 % slov chybných len v diakritike, slovenské verzie od kinit a NaiveNeuron 0,3 až 0,7 %.
 - Pôvodný Whisper zlyháva na krátkych nahrávkach (1 až 3 slová, takmer polovica slovenského Common Voice): large-v3-turbo tam má WER 62 %.
 - BuzzASR má na Common Voice WER 1,19 %, takmer určite preto, že sa učil na Common Voice; toto číslo nepoužívajte na porovnanie.
+
+**Komerčné API (16. 11. 2026, cez OpenRouter):** najpresnejší systém celého benchmarku je **ElevenLabs Scribe v2** (FLEURS 2,68 %, CV 6,75 %, 0,22 USD za hodinu zvuku). Najlepší pomer ceny a výkonu má **moondream/parakeet-ultra** (7,85 % / 7,76 %, 0,06 USD za hodinu), ktorý jediný nezlyháva na krátkych nahrávkach.
 
 ## Citing
 

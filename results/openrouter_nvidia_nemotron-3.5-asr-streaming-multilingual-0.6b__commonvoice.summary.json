@@ -1,0 +1,24 @@
+{
+  "system": "openrouter:nvidia/nemotron-3.5-asr-streaming-multilingual-0.6b",
+  "dataset": "commonvoice",
+  "limit": null,
+  "sk_asr_bench_version": "0.1.0",
+  "scored_at": "2026-11-16T20:19:15+00:00",
+  "scores": {
+    "utterances": 6006,
+    "ref_words": 27694,
+    "ref_chars": 191228,
+    "wer": 0.6918827182783275,
+    "cer": 0.32878553349927836,
+    "diacritics_error_rate": 0.08471148985339785,
+    "substitutions": 14067,
+    "deletions": 4007,
+    "insertions": 1087
+  },
+  "entities": {},
+  "batch_size": 16,
+  "transcription_seconds": 3362.59,
+  "api_cost_usd": 0.0867,
+  "audio_seconds": 26096.96,
+  "rtf": 0.1288
+}
