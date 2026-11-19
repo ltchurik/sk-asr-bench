@@ -1,0 +1,24 @@
+{
+  "system": "openrouter:deepgram/nova-3",
+  "dataset": "fleurs",
+  "limit": null,
+  "sk_asr_bench_version": "0.2.1",
+  "scored_at": "2026-11-19T06:48:28+00:00",
+  "scores": {
+    "utterances": 792,
+    "ref_words": 15206,
+    "ref_chars": 99513,
+    "wer": 0.07569380507694332,
+    "cer": 0.030789947042095003,
+    "diacritics_error_rate": 0.004800736551361305,
+    "substitutions": 816,
+    "deletions": 236,
+    "insertions": 99
+  },
+  "entities": {},
+  "batch_size": 16,
+  "transcription_seconds": 297.3,
+  "api_cost_usd": 0.6743,
+  "audio_seconds": 9408.72,
+  "rtf": 0.0316
+}

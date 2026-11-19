@@ -1,0 +1,24 @@
+{
+  "system": "openrouter:openai/gpt-4o-mini-transcribe",
+  "dataset": "commonvoice",
+  "limit": null,
+  "sk_asr_bench_version": "0.2.1",
+  "scored_at": "2026-11-19T12:17:49+00:00",
+  "scores": {
+    "utterances": 6006,
+    "ref_words": 27694,
+    "ref_chars": 191228,
+    "wer": 0.16418718856069908,
+    "cer": 0.06089066454703286,
+    "diacritics_error_rate": 0.02058207553982812,
+    "substitutions": 3826,
+    "deletions": 406,
+    "insertions": 315
+  },
+  "entities": {},
+  "batch_size": 16,
+  "transcription_seconds": 20054.16,
+  "api_cost_usd": 0.7464,
+  "audio_seconds": 26096.96,
+  "rtf": 0.7684
+}

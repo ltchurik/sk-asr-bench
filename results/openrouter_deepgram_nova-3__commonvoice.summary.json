@@ -1,0 +1,24 @@
+{
+  "system": "openrouter:deepgram/nova-3",
+  "dataset": "commonvoice",
+  "limit": null,
+  "sk_asr_bench_version": "0.2.1",
+  "scored_at": "2026-11-19T07:11:51+00:00",
+  "scores": {
+    "utterances": 6006,
+    "ref_words": 27694,
+    "ref_chars": 191228,
+    "wer": 0.038744854481115046,
+    "cer": 0.009878260505783672,
+    "diacritics_error_rate": 0.004405286343612335,
+    "substitutions": 912,
+    "deletions": 111,
+    "insertions": 50
+  },
+  "entities": {},
+  "batch_size": 16,
+  "transcription_seconds": 1409.14,
+  "api_cost_usd": 1.8663,
+  "audio_seconds": 26096.96,
+  "rtf": 0.054
+}

@@ -23,7 +23,7 @@ identifiers:
 repository-code: "https://github.com/ltchurik/sk-asr-bench"
 url: "https://lubomirtchurik.sk"
 license: MIT
-version: 0.2.1
+version: 0.2.2
 date-released: 2026-11-19
 keywords:
   - slovak
