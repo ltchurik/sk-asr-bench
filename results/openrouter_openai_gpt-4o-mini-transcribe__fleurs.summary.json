@@ -1,0 +1,24 @@
+{
+  "system": "openrouter:openai/gpt-4o-mini-transcribe",
+  "dataset": "fleurs",
+  "limit": null,
+  "sk_asr_bench_version": "0.2.0",
+  "scored_at": "2026-11-18T14:43:54+00:00",
+  "scores": {
+    "utterances": 792,
+    "ref_words": 15206,
+    "ref_chars": 99513,
+    "wer": 0.06056819676443509,
+    "cer": 0.03601539497352105,
+    "diacritics_error_rate": 0.004143101407339208,
+    "substitutions": 647,
+    "deletions": 156,
+    "insertions": 118
+  },
+  "entities": {},
+  "batch_size": 16,
+  "transcription_seconds": 2776.18,
+  "api_cost_usd": 0.3001,
+  "audio_seconds": 9408.72,
+  "rtf": 0.2951
+}

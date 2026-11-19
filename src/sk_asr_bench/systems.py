@@ -199,6 +199,7 @@ def _openai(model: str, base: str = "", key: str = "") -> Transcriber:  # pragma
     rate limits and server errors are retried with backoff. When the endpoint reports
     a price (OpenRouter's ``usage.cost``), it is kept per utterance in ``run.costs``.
     """
+    import threading
     import time
     import urllib.error
     from concurrent.futures import ThreadPoolExecutor
@@ -206,7 +207,21 @@ def _openai(model: str, base: str = "", key: str = "") -> Transcriber:  # pragma
     base = (base or os.environ.get("OPENAI_BASE_URL", "https://api.openai.com/v1")).rstrip("/")
     key = key or os.environ.get("OPENAI_API_KEY", "")
     workers = int(os.environ.get("SK_ASR_CONCURRENCY", "8"))
+    # Optional client-side rate limit, e.g. SK_ASR_RPM=18 for OpenRouter's 20 rpm cap on new accounts.
+    rpm = float(os.environ.get("SK_ASR_RPM", "0"))
+    gate = threading.Lock()
+    next_slot = [0.0]
     costs: Dict[str, float] = {}
+
+    def throttle() -> None:
+        if rpm <= 0:
+            return
+        with gate:
+            now = time.monotonic()
+            wait = next_slot[0] - now
+            next_slot[0] = max(now, next_slot[0]) + 60.0 / rpm
+        if wait > 0:
+            time.sleep(wait)
 
     def request(utt: Utterance) -> dict:
         if isinstance(utt.audio, str) and utt.audio.lower().endswith(".wav"):
@@ -227,6 +242,7 @@ def _openai(model: str, base: str = "", key: str = "") -> Transcriber:  # pragma
         body = b"".join(parts)
         headers = {"Content-Type": f"multipart/form-data; boundary={boundary}", "Authorization": f"Bearer {key}"}
         for attempt in range(10):
+            throttle()
             try:
                 req = urllib.request.Request(f"{base}/audio/transcriptions", data=body, headers=headers)
                 with urllib.request.urlopen(req, timeout=300) as resp:

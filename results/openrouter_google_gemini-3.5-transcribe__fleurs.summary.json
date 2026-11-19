@@ -1,0 +1,24 @@
+{
+  "system": "openrouter:google/gemini-3.5-transcribe",
+  "dataset": "fleurs",
+  "limit": null,
+  "sk_asr_bench_version": "0.2.0",
+  "scored_at": "2026-11-18T15:28:28+00:00",
+  "scores": {
+    "utterances": 792,
+    "ref_words": 15206,
+    "ref_chars": 99513,
+    "wer": 0.034394318032355646,
+    "cer": 0.015967763005838433,
+    "diacritics_error_rate": 0.00190714191766408,
+    "substitutions": 355,
+    "deletions": 119,
+    "insertions": 49
+  },
+  "entities": {},
+  "batch_size": 16,
+  "transcription_seconds": 2668.68,
+  "api_cost_usd": 0.8754,
+  "audio_seconds": 9408.72,
+  "rtf": 0.2836
+}
